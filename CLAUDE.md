@@ -4,12 +4,14 @@ The rules in `~/projects/CLAUDE.md` apply here too. If the two ever disagree, th
 
 ## What this repo is
 
-Shared code for PhotoMapper and Crane Charts, implementing the HuttonHomeHub App Standard (link in README). Packages live in `packages/` (npm workspaces): `@hhh/config` now; `@hhh/ui` and `@hhh/server` follow. It is not deployed and has no image: a release is a bundle on GitHub Releases that the apps vendor.
+Shared code for PhotoMapper and Crane Charts, implementing the HuttonHomeHub App Standard (link in README). Packages live in `packages/` (npm workspaces): `@hhh/config`, `@hhh/ui`; `@hhh/server` follows. It is not deployed and has no image: a release is a bundle on GitHub Releases that the apps vendor.
 
 ## CT 106
 
 - **Checks:** `npm run check`, in the Node container (command in README). It writes only the gitignored `node_modules/`, `coverage/` and `dist-release/`.
 - No dev stack or port: nothing runs as a service.
+- **Screenshots:** after any visual change to `@hhh/ui`, rebuild the showcase and recapture (commands in README), look at every PNG in both themes and on the phone width, and commit them. The user has agreed to Playwright running in its pinned image for this.
+- `packages/ui` has its own `tsconfig.json` (DOM, JSX); the root one covers Node code and excludes it. Browser code in Node scripts goes in strings (`page.evaluate('...')`).
 
 ## Rules specific to this repo
 

@@ -44,6 +44,20 @@ docker run --rm --user 1000:1000 -e HOME=/tmp -e npm_config_cache=/tmp/.npm -v "
 `npm run check` runs exactly what CI runs: typecheck, lint, format check, tests with an 80% line
 coverage gate, the release bundle build, and `npm audit --audit-level=high`.
 
+### Component screenshots
+
+The showcase renders every `@hhh/ui` component with test data. After changing a component,
+rebuild it and recapture both themes (Playwright runs in its own image; no browser on the box):
+
+```bash
+docker run --rm --user 1000:1000 -e HOME=/tmp -e npm_config_cache=/tmp/.npm -v "$PWD":/app -w /app \
+  node:22-bookworm npm run showcase
+docker run --rm --user 1000:1000 -e HOME=/tmp -v "$PWD":/app -w /app \
+  mcr.microsoft.com/playwright:v1.65.1-noble node scripts/screenshots.ts
+```
+
+Review the PNGs in `docs/screenshots/` and commit them with the change.
+
 ## Release
 
 A release is merging `dev` into `main` (Ship It). `publish-release.yml` runs CI, checks that

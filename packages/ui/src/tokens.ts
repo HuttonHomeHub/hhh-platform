@@ -176,6 +176,8 @@ export const scale: Record<string, string> = {
   'z-modal': '800',
   'z-toast': '900',
   'app-bar-h': '56px',
+  'control-h-sm': '28px',
+  'control-h-md': '36px',
   'focus-ring-width': '2px',
   'touch-target': '40px',
 };

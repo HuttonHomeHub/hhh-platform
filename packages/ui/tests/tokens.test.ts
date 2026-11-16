@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { runInNewContext } from 'node:vm';
 import { describe, expect, it } from 'vitest';
-import { TOKENS_CSS, main as tokensMain, renderTokensCss } from '../scripts/build-tokens.ts';
+import { TOKENS_CSS, main as tokensMain, renderTokensCss } from '../../../scripts/build-tokens.ts';
 import {
   CONTRAST_MIN,
   THEMES,
@@ -15,7 +15,7 @@ import {
   nextTheme,
   readThemeChoice,
   textPairs,
-} from '../packages/ui/src/index.ts';
+} from '../src/index.ts';
 
 function memoryStorage(initial: Record<string, string> = {}) {
   const data = new Map(Object.entries(initial));
@@ -122,10 +122,7 @@ describe('theme choice', () => {
   });
 
   it('theme-init.js applies a stored pick before paint and ignores anything else', async () => {
-    const code = await readFile(
-      resolve(import.meta.dirname, '../packages/ui/theme-init.js'),
-      'utf8'
-    );
+    const code = await readFile(resolve(import.meta.dirname, '../theme-init.js'), 'utf8');
     for (const [stored, expected] of [
       ['dark', 'dark'],
       ['light', 'light'],

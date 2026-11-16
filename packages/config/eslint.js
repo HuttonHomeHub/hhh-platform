@@ -2,16 +2,20 @@
 // what is genuinely app-specific (e.g. eslint-plugin-react), with a comment saying why.
 //
 //   import { hhhConfig } from '@hhh/config/eslint';
-//   export default hhhConfig({ browser: ['src/**/*.{ts,tsx}'], node: ['server/**/*.ts'] });
+//   export default hhhConfig({
+//     browser: ['src/**/*.{ts,tsx}'], react: ['src/**/*.tsx'], node: ['server/**/*.ts'],
+//   });
 import js from '@eslint/js';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 /**
- * @param {{ browser?: string[], node?: string[], ignores?: string[] }} [options]
+ * @param {{ browser?: string[], react?: string[], node?: string[], ignores?: string[] }} [options]
  */
 export function hhhConfig(options = {}) {
-  const { browser = [], node = ['**/*.ts'], ignores = [] } = options;
+  const { browser = [], react = [], node = ['**/*.ts'], ignores = [] } = options;
   return tseslint.config(
     {
       ignores: [
@@ -48,6 +52,20 @@ export function hhhConfig(options = {}) {
       rules: { 'no-restricted-exports': 'off' },
     },
     ...(browser.length ? [{ files: browser, languageOptions: { globals: globals.browser } }] : []),
+    // React files: the react plugin's recommended rules for the automatic JSX runtime, and
+    // the hooks rules. No prop-types (TypeScript checks props).
+    ...(react.length
+      ? [
+          {
+            files: react,
+            ...reactPlugin.configs.flat.recommended,
+            ...reactPlugin.configs.flat['jsx-runtime'],
+            settings: { react: { version: 'detect' } },
+          },
+          { files: react, ...reactHooks.configs.flat['recommended-latest'] },
+          { files: react, rules: { 'react/prop-types': /** @type {'off'} */ ('off') } },
+        ]
+      : []),
     ...(node.length ? [{ files: node, languageOptions: { globals: globals.node } }] : [])
   );
 }
