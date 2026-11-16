@@ -4,3 +4,4 @@ dist/
 dist-release/
 *.local
 packages/ui/showcase/dist/
+packages/server/dist/

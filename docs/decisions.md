@@ -3,6 +3,19 @@
 Dated log of choices with lasting effect: what, why, and what was rejected. Newest first.
 The overall standard is the HuttonHomeHub App Standard (link in the README).
 
+## 2026-11-16 — Server kit choices
+
+- **Express 5** (the standard's settled question 3): async errors reach the error handler without
+  `express-async-errors`. Both apps move to it when they adopt `@hhh/server`.
+- **`@hhh/server` ships compiled JavaScript**, not TypeScript source: Node refuses to strip types
+  from files under `node_modules`, where an app's vendored copy is linked.
+- **`TRUST_PROXY` is a hop count only.** PhotoMapper also accepted IP lists and `true`; the standard
+  is a hop count (`true` still means 1). Live uses `1` in both apps.
+- **Rate limits are written "60 per minute"** in every app (Crane Charts' form), replacing
+  PhotoMapper's `RATE_LIMIT_WINDOW_MS`/`RATE_LIMIT_MAX`.
+- **Request logs carry no headers.** PhotoMapper logged every request header, including the
+  tinyauth session cookie; one line now holds id, method, path, status and duration.
+
 ## 2026-11-16 — Colours changed from the standard document, for contrast
 
 The contrast test (every text colour on every background it may sit on, 4.5:1) failed four

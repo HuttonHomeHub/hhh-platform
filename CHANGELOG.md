@@ -11,6 +11,14 @@ that section as the GitHub Release notes.
 ## Unreleased
 
 ### Added
+- **`@hhh/server`, request handling:** `loadSettings` (shared settings, old names with deprecation,
+  every bad value listed at startup), `resolveDataPaths`, `createLogger`/`httpLogger` (one small JSON
+  line per request, no headers, health probes skipped), JSON errors (`HttpError`, validation 400 with
+  the field, bad JSON 400, too large 413, everything else a logged 500), `securityHeaders` with a
+  per-request CSP nonce, double-submit `csrf`, `rateLimiter`/`parseRate` ("60 per minute"),
+  `healthRoutes` (`/health`, `/ready`, `/version`), `gracefulShutdown`, and `createBaseApp`/
+  `finishApp` so every app's middleware runs in the same order. Ships compiled JavaScript with
+  type definitions.
 - **`@hhh/ui` components:** `AppBar` (menu, brand with the version badge, search, the app's
   actions, keyboard shortcuts, theme toggle, settings), `ThemeToggle`, `SettingsPanel` with
   `InstanceInfoCard` and `BackupsCard` (back up now, download, restore and upload-restore, each

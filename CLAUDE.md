@@ -4,7 +4,7 @@ The rules in `~/projects/CLAUDE.md` apply here too. If the two ever disagree, th
 
 ## What this repo is
 
-Shared code for PhotoMapper and Crane Charts, implementing the HuttonHomeHub App Standard (link in README). Packages live in `packages/` (npm workspaces): `@hhh/config`, `@hhh/ui`; `@hhh/server` follows. It is not deployed and has no image: a release is a bundle on GitHub Releases that the apps vendor.
+Shared code for PhotoMapper and Crane Charts, implementing the HuttonHomeHub App Standard (link in README). Packages live in `packages/` (npm workspaces): `@hhh/config`, `@hhh/ui`, `@hhh/server`. It is not deployed and has no image: a release is a bundle on GitHub Releases that the apps vendor.
 
 ## CT 106
 
@@ -18,6 +18,7 @@ Shared code for PhotoMapper and Crane Charts, implementing the HuttonHomeHub App
 - Apps vendor releases with `scripts/vendor.ts` (it ships inside each bundle). Never edit an app's `vendor/hhh-platform/` by hand; change the platform, release it, and bump the app's pin in its own PR.
 - `scripts/pack-release.ts` builds the bundle from each package's `package.json` `files`. A new file a package must ship goes in its `files` list, or apps won't get it.
 - The bundle is reproducible (same input, same bytes); keep it that way: no timestamps or machine paths in packed files.
+- `@hhh/server` ships compiled JavaScript (`npm run build:server` → `packages/server/dist`, gitignored) because Node won't run TypeScript from inside an app's `node_modules`. `@hhh/ui` and `@hhh/config` ship source: Vite compiles them. `npm run check` builds the server before the tests, since the release test packs a real bundle.
 - All packages share the platform's version (root `package.json`); the bundle rewrites each package's version to it.
 - `packages/config/package.json` lists the tools an app must install under `requiredTools`, not `peerDependencies` (npm 10 crashes resolving peers inside a workspace).
 - Tool pins, and why each is held back, are in `docs/decisions.md` and `.github/dependabot.yml`.
