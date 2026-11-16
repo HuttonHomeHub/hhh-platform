@@ -20,3 +20,27 @@ export {
 export type { DataPaths, LoadedSettings, LogLevel } from './settings.ts';
 export { gracefulShutdown } from './shutdown.ts';
 export type { ShutdownOptions } from './shutdown.ts';
+export {
+  RestoreError,
+  backupName,
+  createBackup,
+  isBackupName,
+  listBackups,
+  pruneBackups,
+  restoreBackup,
+  startBackupScheduler,
+} from './backups.ts';
+export type {
+  BackupContext,
+  BackupInfo,
+  BackupSettings,
+  RestoreHooks,
+  RestoreResult,
+  SchedulerStatus,
+} from './backups.ts';
+export { openDatabase, pingDatabase, userTables } from './db.ts';
+export type { Database } from './db.ts';
+export { createLock } from './lock.ts';
+export type { WithLock } from './lock.ts';
+export { MigrationError, readMigrations, runMigrations } from './migrations.ts';
+export type { Migration, MigrationResult } from './migrations.ts';
