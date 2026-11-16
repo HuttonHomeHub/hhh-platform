@@ -10,6 +10,22 @@ that section as the GitHub Release notes.
 
 ## Unreleased
 
+## v0.2.0 — apiFetch, kit errors and rates for PhotoMapper's adoption
+
+### Added
+- **`@hhh/ui`: `apiFetch`**, the one way the browser calls the API: JSON or FormData bodies, the
+  CSRF header on writes (retried once if the server has just issued a new cookie), and `ApiError`
+  carrying the server's message, status and `details`.
+
+### Changed
+- **`@hhh/server` error handler:** an error carrying its own 4xx `status` or `statusCode` (as
+  Express's http-errors do) is answered with that status and message; multer's file-too-large error
+  is answered 413. Anything else is still a generic 500.
+- **`parseRate` takes multiples:** `"1000 per 15 minutes"` as well as `"60 per minute"`.
+- **ESLint: `x == null` is allowed** (it matches null and undefined together); every other `==`
+  is still an error. PhotoMapper's code uses the idiom 62 times.
+- Test tooling: jsdom 31.0.1, @testing-library/dom 10.4.2 (Dependabot).
+
 ## v0.1.0 — foundation, design system, app shell and server kit
 
 ### Added

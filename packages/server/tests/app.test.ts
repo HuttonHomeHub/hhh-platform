@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { Writable } from 'node:stream';
 import express from 'express';
 import { pino } from 'pino';
@@ -6,6 +7,7 @@ import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import {
   CSRF_COOKIE,
+  CSRF_HEADER,
   HttpError,
   createBaseApp,
   finishApp,
@@ -45,6 +47,15 @@ function makeApp(opts: { trustProxyHops?: number; ready?: () => void } = {}) {
   });
   app.get('/api/boom', () => {
     throw new Error('secret stack detail');
+  });
+  app.get('/api/http-error', () => {
+    throw Object.assign(new Error('Range Not Satisfiable'), { statusCode: 416 });
+  });
+  app.get('/api/server-status', () => {
+    throw Object.assign(new Error('upstream detail'), { status: 503 });
+  });
+  app.get('/api/too-big', () => {
+    throw Object.assign(new Error('File too large'), { code: 'LIMIT_FILE_SIZE' });
   });
   app.get('/api/async-boom', async () => {
     await Promise.resolve();
@@ -163,6 +174,27 @@ describe('errors', () => {
     expect(big.status).toBe(413);
   });
 
+  it("pass on a library error's own 4xx status, and an upload over its size limit as 413", async () => {
+    const { app } = makeApp();
+    const ranged = await request(app).get('/api/http-error');
+    expect(ranged.status).toBe(416);
+    expect(ranged.body).toEqual({ error: 'Range Not Satisfiable' });
+    const upload = await request(app).get('/api/too-big');
+    expect(upload.status).toBe(413);
+    expect(upload.body).toEqual({ error: 'File is too large' });
+    // A 5xx status is still unexpected: generic message, nothing leaked.
+    const upstream = await request(app).get('/api/server-status');
+    expect(upstream.status).toBe(500);
+    expect(upstream.body).toEqual({ error: 'Internal server error' });
+  });
+
+  it('use the same CSRF cookie and header names as apiFetch in @hhh/ui', () => {
+    // Read as text: @hhh/ui is browser code, outside this (Node) TypeScript project.
+    const ui = readFileSync(new URL('../../ui/src/api.ts', import.meta.url), 'utf8');
+    expect(ui).toContain(`export const CSRF_COOKIE = '${CSRF_COOKIE}';`);
+    expect(ui.toLowerCase()).toContain(`export const csrf_header = '${CSRF_HEADER}';`);
+  });
+
   it('hide unexpected errors behind a generic message and log them with the stack', async () => {
     const { app, lines } = makeApp();
     for (const path of ['/api/boom', '/api/async-boom']) {
@@ -210,6 +242,9 @@ describe('rate limits', () => {
     expect(parseRate('60 per minute')).toEqual({ limit: 60, windowMs: 60_000 });
     expect(parseRate('5/second')).toEqual({ limit: 5, windowMs: 1000 });
     expect(parseRate('1000 per hours')).toEqual({ limit: 1000, windowMs: 3_600_000 });
+    expect(parseRate('1000 per 15 minutes')).toEqual({ limit: 1000, windowMs: 900_000 });
+    expect(parseRate('10/2 seconds')).toEqual({ limit: 10, windowMs: 2000 });
+    expect(() => parseRate('5 per 0 minutes')).toThrow('1000 per 15 minutes');
     expect(() => parseRate('lots')).toThrow('60 per minute');
     expect(() => parseRate('0 per minute')).toThrow();
   });
