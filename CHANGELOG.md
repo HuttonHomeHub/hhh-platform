@@ -11,6 +11,15 @@ that section as the GitHub Release notes.
 ## Unreleased
 
 ### Added
+- **`@hhh/server`, data:** `openDatabase` (WAL, foreign keys, busy timeout), `runMigrations`
+  (numbered SQL files recorded with checksums, a copy of a database with data before migrating,
+  each migration in its own transaction, an edited released migration stops startup),
+  `createLock` (one write at a time across files and database), backups (`createBackup`,
+  `listBackups`, `pruneBackups` per kind, `isBackupName`) and `restoreBackup` (every entry name,
+  the declared and written size, and the database's integrity and tables checked before anything
+  live is touched; a `prerestore` safety backup; uploads swapped first and the database last,
+  copying when uploads are on another disk, and the old uploads put back if the swap fails),
+  plus `startBackupScheduler` with its status for the Settings panel.
 - **`@hhh/server`, request handling:** `loadSettings` (shared settings, old names with deprecation,
   every bad value listed at startup), `resolveDataPaths`, `createLogger`/`httpLogger` (one small JSON
   line per request, no headers, health probes skipped), JSON errors (`HttpError`, validation 400 with
