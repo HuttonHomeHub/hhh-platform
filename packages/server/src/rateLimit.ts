@@ -1,5 +1,6 @@
 // Rate limits per client IP (the real one behind the proxy, via TRUST_PROXY), written
-// the same way in every app: "<n> per <second|minute|hour|day>".
+// the same way in every app: "<n> per [<k>] <second|minute|hour|day>", e.g.
+// "60 per minute" or "1000 per 15 minutes".
 import type { RequestHandler } from 'express';
 import { rateLimit } from 'express-rate-limit';
 
@@ -16,9 +17,12 @@ export interface Rate {
 }
 
 export function parseRate(text: string): Rate {
-  const m = /^\s*(\d+)\s*(?:per|\/)\s*(second|minute|hour|day)s?\s*$/i.exec(text);
-  if (!m || Number(m[1]) < 1) throw new Error(`rate must look like "60 per minute", got "${text}"`);
-  return { limit: Number(m[1]), windowMs: UNITS[(m[2] ?? '').toLowerCase()] ?? 0 };
+  const m = /^\s*(\d+)\s*(?:per|\/)\s*(?:(\d+)\s*)?(second|minute|hour|day)s?\s*$/i.exec(text);
+  const limit = Number(m?.[1]);
+  const count = m?.[2] === undefined ? 1 : Number(m[2]);
+  if (!m || limit < 1 || count < 1)
+    throw new Error(`rate must look like "60 per minute" or "1000 per 15 minutes", got "${text}"`);
+  return { limit, windowMs: count * (UNITS[(m[3] ?? '').toLowerCase()] ?? 0) };
 }
 
 export function rateLimiter(rate: Rate): RequestHandler {
