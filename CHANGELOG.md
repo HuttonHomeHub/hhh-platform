@@ -10,6 +10,10 @@ that section as the GitHub Release notes.
 
 ## Unreleased
 
+### Changed
+- **ESLint: `x == null` is allowed** (it matches null and undefined together); every other `==`
+  is still an error. PhotoMapper's code uses the idiom 62 times.
+
 ## v0.1.0 — foundation, design system, app shell and server kit
 
 ### Added

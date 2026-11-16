@@ -43,7 +43,8 @@ export function hhhConfig(options = {}) {
           'error',
           { 'ts-expect-error': 'allow-with-description' },
         ],
-        eqeqeq: ['error', 'always'],
+        // `x == null` matches null and undefined together: a deliberate, common idiom.
+        eqeqeq: ['error', 'always', { null: 'ignore' }],
         'no-console': ['error', { allow: ['warn', 'error'] }],
       },
     },
