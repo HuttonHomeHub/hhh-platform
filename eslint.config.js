@@ -7,5 +7,11 @@ const browser = ['packages/ui/{src,tests,showcase}/**/*.{ts,tsx}', 'packages/ui/
 export default hhhConfig({
   browser,
   react: ['packages/ui/{src,tests,showcase}/**/*.tsx'],
-  node: ['scripts/**/*.ts', 'tests/**/*.ts', 'packages/*/src/**/*.ts', '*.config.{js,ts}'],
+  node: [
+    'scripts/**/*.ts',
+    'tests/**/*.ts',
+    'packages/*/src/**/*.ts',
+    'packages/server/tests/**/*.ts',
+    '*.config.{js,ts}',
+  ],
 });

@@ -10,8 +10,10 @@
     "tests/**/*.ts",
     "packages/config/**/*.ts",
     "packages/config/**/*.js",
+    "packages/server/src/**/*.ts",
+    "packages/server/tests/**/*.ts",
     "*.config.js",
     "vitest.config.ts"
   ],
-  "exclude": ["node_modules", "dist-release", "packages/ui"]
+  "exclude": ["node_modules", "dist-release", "packages/ui", "packages/server/dist"]
 }

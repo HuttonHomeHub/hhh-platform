@@ -44,7 +44,11 @@ export async function packRelease(root: string, outDir: string): Promise<PackRes
       const dest = join(bundle, 'packages', pkg);
       await mkdir(dest, { recursive: true });
       for (const entry of meta.files ?? []) {
-        await cp(join(src, entry), join(dest, entry), { recursive: true });
+        await cp(join(src, entry), join(dest, entry), { recursive: true }).catch((err: unknown) => {
+          throw new Error(`${meta.name}: "${entry}" is missing (build it first: npm run build)`, {
+            cause: err,
+          });
+        });
       }
       // Packages are released together, so each carries the platform's version.
       await writeFile(
