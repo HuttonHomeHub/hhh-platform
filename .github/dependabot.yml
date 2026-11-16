@@ -1,0 +1,36 @@
+# Dependency updates. Every PR targets dev, never main: merging into main is a
+# release, and that stays the owner's decision. Minor and patch bumps are grouped
+# into one weekly PR per ecosystem; major bumps get their own PRs.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    target-branch: dev
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      npm-minor-patch:
+        update-types: [minor, patch]
+    ignore:
+      # Matches the Node 22 runtime; a new Node major is a deliberate standard change.
+      - dependency-name: '@types/node'
+        update-types: [version-update:semver-major]
+      # typescript-eslint supports TypeScript < 6.1; move when it supports 7.
+      - dependency-name: typescript
+        update-types: [version-update:semver-major]
+      # eslint-plugin-react (used by the apps) supports ESLint 9 only; move when it supports 10.
+      - dependency-name: eslint
+        update-types: [version-update:semver-major]
+      - dependency-name: '@eslint/js'
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: dev
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions-minor-patch:
+        update-types: [minor, patch]
