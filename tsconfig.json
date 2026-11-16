@@ -8,10 +8,10 @@
   "include": [
     "scripts/**/*.ts",
     "tests/**/*.ts",
-    "packages/**/*.ts",
-    "packages/**/*.js",
+    "packages/config/**/*.ts",
+    "packages/config/**/*.js",
     "*.config.js",
     "vitest.config.ts"
   ],
-  "exclude": ["node_modules", "dist-release", "packages/ui/theme-init.js"]
+  "exclude": ["node_modules", "dist-release", "packages/ui"]
 }

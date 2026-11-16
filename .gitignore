@@ -3,3 +3,4 @@ coverage/
 dist/
 dist-release/
 *.local
+packages/ui/showcase/dist/
