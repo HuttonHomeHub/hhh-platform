@@ -34,6 +34,7 @@ describe('@hhh/config', () => {
     const config = hhhConfig({ browser: ['src/**/*.tsx'] });
     const rules = Object.assign({}, ...config.map((c) => c.rules ?? {}));
     expect(rules['@typescript-eslint/no-explicit-any']).toBe('error');
+    expect(rules.eqeqeq).toEqual(['error', 'always', { null: 'ignore' }]);
     expect(rules['no-restricted-exports']).toBeDefined();
     const browser = config.find((c) => c.files?.includes('src/**/*.tsx'));
     expect(browser?.languageOptions?.globals).toHaveProperty('window');
