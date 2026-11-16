@@ -1,0 +1,19 @@
+{
+  "extends": "./packages/config/tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": [
+    "scripts/**/*.ts",
+    "tests/**/*.ts",
+    "packages/config/**/*.ts",
+    "packages/config/**/*.js",
+    "packages/server/src/**/*.ts",
+    "packages/server/tests/**/*.ts",
+    "*.config.js",
+    "vitest.config.ts"
+  ],
+  "exclude": ["node_modules", "dist-release", "packages/ui", "packages/server/dist"]
+}

@@ -1,0 +1,74 @@
+name: Publish release
+
+# A release is a merge into main. This workflow runs CI, then builds the release
+# bundle (hhh-platform-X.Y.Z.tgz + .sha256) from the version in package.json and
+# publishes it as the GitHub Release vX.Y.Z, creating the tag with the built-in
+# token. Apps vendor it with scripts/vendor.ts. If vX.Y.Z already exists the run
+# fails before building, so a release without a version bump can't replace one.
+# To retry a failed run, use "Re-run jobs" on GitHub.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-release
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # create the vX.Y.Z tag and GitHub Release
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Read and check version
+        id: version
+        run: |
+          v="$(jq -r .version package.json)"
+          if ! printf '%s' "$v" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::package.json version must be X.Y.Z, got '$v'"; exit 1
+          fi
+          if git ls-remote --exit-code --tags origin "refs/tags/v$v" >/dev/null; then
+            echo "::error::v$v already exists. Bump the version and add a CHANGELOG entry."; exit 1
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+
+      - name: Release notes from CHANGELOG
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          awk -v h="## v$VERSION" '
+            index($0, h) == 1 && (length($0) == length(h) || substr($0, length(h) + 1, 1) == " ") { on = 1; next }
+            on && /^## / { exit }
+            on { print }
+          ' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
+          if ! grep -q '[^[:space:]]' "$RUNNER_TEMP/notes.md"; then
+            echo "::error::CHANGELOG.md has no '## v$VERSION' section"; exit 1
+          fi
+
+      - name: Build the release bundle
+        run: |
+          npm ci
+          npm run build
+
+      - name: Create tag and GitHub Release with the bundle
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "v$VERSION" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "v$VERSION" --notes-file "$RUNNER_TEMP/notes.md" \
+            "dist-release/hhh-platform-$VERSION.tgz" "dist-release/hhh-platform-$VERSION.tgz.sha256"
