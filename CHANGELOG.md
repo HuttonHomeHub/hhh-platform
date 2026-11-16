@@ -10,6 +10,8 @@ that section as the GitHub Release notes.
 
 ## Unreleased
 
+## v0.1.0 — foundation, design system, app shell and server kit
+
 ### Added
 - **`@hhh/server`, data:** `openDatabase` (WAL, foreign keys, busy timeout), `runMigrations`
   (numbered SQL files recorded with checksums, a copy of a database with data before migrating,
