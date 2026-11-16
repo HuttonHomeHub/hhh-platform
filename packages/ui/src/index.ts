@@ -40,3 +40,5 @@ export type {
   InfoRow,
   InstanceInfo,
 } from './components/Settings.tsx';
+export { ApiError, CSRF_COOKIE, CSRF_HEADER, apiFetch, readCsrfToken } from './api.ts';
+export type { ApiOptions } from './api.ts';
