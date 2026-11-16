@@ -11,6 +11,14 @@ that section as the GitHub Release notes.
 ## Unreleased
 
 ### Added
+- **`@hhh/ui` design tokens:** one source (`src/tokens.ts`) for every colour, size, radius, shadow,
+  duration and layer, generated into `styles/tokens.css`. Light (Crane Charts' greys) is the default,
+  dark (PhotoMapper's navy) applies when the system prefers it or the user picks it; one orange
+  accent. A test checks all 29 text/background pairs reach 4.5:1 in both themes.
+- **`@hhh/ui` base styles and fonts:** Inter 4.1 self-hosted (OFL), focus ring, reduced motion,
+  `hhh-tabular` and `hhh-sr-only` helpers.
+- **Theme handling:** follows the system until the user picks; `theme-init.js` applies a stored pick
+  before first paint without an inline script; `src/theme.ts` is what the toggle calls.
 - **Repository foundation:** npm workspaces, TypeScript 6 (strict), ESLint 9, Prettier, Vitest 5
   with an 80% line-coverage gate, and one `npm run check` that runs what CI runs.
 - **`@hhh/config`:** the shared `tsconfig.base.json`, ESLint config (`hhhConfig()`), Prettier
