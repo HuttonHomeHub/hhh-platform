@@ -13,5 +13,5 @@
     "*.config.js",
     "vitest.config.ts"
   ],
-  "exclude": ["node_modules", "dist-release"]
+  "exclude": ["node_modules", "dist-release", "packages/ui/theme-init.js"]
 }
