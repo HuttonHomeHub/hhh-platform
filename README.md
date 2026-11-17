@@ -5,11 +5,11 @@ Shared code for the HuttonHomeHub apps ([PhotoMapper](https://github.com/HuttonH
 built the same way. It implements the
 [HuttonHomeHub App Standard](https://claude.ai/artifact/1aL1Z9yughEYwwBEZx2sGf).
 
-| Package       | What it holds                                                           |
-| ------------- | ----------------------------------------------------------------------- |
-| `@hhh/config` | TypeScript (`tsconfig.base.json`), ESLint, Prettier and Vitest settings |
-| `@hhh/ui`     | Design tokens, base styles, React components, icons _(coming)_          |
-| `@hhh/server` | Settings, health/version routes, logging, security, backups _(coming)_  |
+| Package       | What it holds                                                                                                                                             |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@hhh/config` | TypeScript (`tsconfig.base.json`), ESLint, Prettier and Vitest settings, and the Vite plugin that loads the theme before first paint (`@hhh/config/vite`) |
+| `@hhh/ui`     | Design tokens, base styles, React components, icons _(coming)_                                                                                            |
+| `@hhh/server` | Settings, health/version routes, logging, security, backups _(coming)_                                                                                    |
 
 ## How apps use it
 

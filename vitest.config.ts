@@ -9,6 +9,7 @@ export default mergeConfig(
       'scripts/**/*.ts',
       'packages/*/src/**/*.{ts,tsx}',
       'packages/config/vitest.ts',
+      'packages/config/vite.ts',
     ],
   }),
   defineConfig({ plugins: [react()] })
