@@ -10,6 +10,18 @@ that section as the GitHub Release notes.
 
 ## Unreleased
 
+## v0.3.0 — theme-init Vite plugin, self-centring dialogs
+
+### Added
+- **`@hhh/config/vite`: `hhhThemeInit()`**, the Vite plugin every app uses to load `theme-init.js`
+  before first paint: it serves it in dev, emits it beside `index.html` in the build, and adds the
+  `<script>` tag to `<head>` (the CSP allows no inline script). From PhotoMapper, where it was a local
+  plugin.
+
+### Fixed
+- Dialogs (`hhh-dialog`) centre themselves; an app's `* { margin: 0 }` reset used to pin them to the
+  top-left corner (found in PhotoMapper).
+
 ## v0.2.0 — apiFetch, kit errors and rates for PhotoMapper's adoption
 
 ### Added

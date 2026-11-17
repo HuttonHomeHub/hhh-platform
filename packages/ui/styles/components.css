@@ -303,6 +303,8 @@
 
 /* ---------- Dialog ---------- */
 .hhh-dialog {
+  /* Centred whatever reset the app uses (a `* { margin: 0 }` reset would pin it top-left). */
+  margin: auto;
   width: min(560px, calc(100vw - 2 * var(--space-4)));
   max-height: calc(100vh - 2 * var(--space-8));
   padding: 0;
