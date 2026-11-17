@@ -10,6 +10,8 @@ that section as the GitHub Release notes.
 
 ## Unreleased
 
+## v0.3.0 — theme-init Vite plugin, self-centring dialogs
+
 ### Added
 - **`@hhh/config/vite`: `hhhThemeInit()`**, the Vite plugin every app uses to load `theme-init.js`
   before first paint: it serves it in dev, emits it beside `index.html` in the build, and adds the
